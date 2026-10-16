@@ -71,6 +71,16 @@ daher die eindeutige Ableitung aus der Angebotsnummer (`A-2026-0346` → `TPC-AB
 **Optionen** (pro AB umschaltbar, Standard in `optionen`): Angebotsnummer nennen · USt-IdNr. des Kunden
 drucken · „Deutschland“ weglassen · Summen drucken · weitere Hinweise (z. B. AGB-Verweis) drucken.
 
+## Einzeldatei (ohne Server)
+
+```bash
+npm run build:single   # → dist/AB-Generator.html
+```
+
+Eine einzige HTML-Datei mit allem darin (Programm, Schriften, Logo, Firmendaten). Per Doppelklick in
+jedem aktuellen Browser öffnen – kein Server, keine Installation, kein Internet nötig. Enthält
+`public/firmendaten.json` (IBAN, Steuernummer), daher nur intern weitergeben.
+
 ## Hosting
 
 `npm run build` erzeugt einen statischen Ordner `dist/` (relative Pfade). Der kann auf **jeden Webspace**

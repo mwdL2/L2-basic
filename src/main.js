@@ -19,7 +19,11 @@ import { SOURCE_LABELS } from './core/merge.js';
 import { loadConfig, loadAssets } from './app/assets.js';
 import { renderPreview } from './app/preview.js';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+// Einzeldatei-Version: Worker-Code liegt eingebettet vor und läuft als blob:-Worker
+const inlineWorker = globalThis.__AB_INLINE__?.['pdf.worker.mjs'];
+pdfjsLib.GlobalWorkerOptions.workerSrc = inlineWorker
+  ? URL.createObjectURL(new Blob([inlineWorker], { type: 'text/javascript' }))
+  : workerUrl;
 
 const $ = (sel) => document.querySelector(sel);
 

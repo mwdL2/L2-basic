@@ -1,14 +1,28 @@
 // Lädt Firmendaten, Schriften und Logo – ausschließlich vom eigenen Server.
+// In der Einzeldatei-Version (tools/build-single.mjs) sind alle Dateien in
+// window.__AB_INLINE__ eingebettet; dann wird gar nichts nachgeladen.
 
 import { normalizeConfig } from '../core/abModel.js';
 
+const INLINE = globalThis.__AB_INLINE__ || {};
+
+function base64ToBytes(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
 async function fetchBytes(url) {
+  if (typeof INLINE[url] === 'string') return base64ToBytes(INLINE[url]);
   const res = await fetch(url, { cache: 'no-cache' });
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   return new Uint8Array(await res.arrayBuffer());
 }
 
 async function fetchJson(url) {
+  if (url in INLINE) return structuredClone(INLINE[url]);
+  if (Object.keys(INLINE).length) throw new Error(`${url}: nicht eingebettet`);
   const res = await fetch(url, { cache: 'no-cache' });
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   return res.json();
