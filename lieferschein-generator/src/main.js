@@ -661,11 +661,30 @@ async function updatePreview() {
   }
 }
 
+// Als claude.ai-Vorschau eingebettet sind normale Downloads gesperrt; dort
+// speichert die Plattform die Datei nach Rückfrage. Überall sonst gibt es
+// kein window.claude und der Download läuft wie gewohnt über einen Link.
+const hostDownloads = window.claude?.use ? window.claude.use('downloads').catch(() => null) : Promise.resolve(null);
+
 async function download() {
   if (Object.keys(currentErrors()).length) return;
   const bytes = await buildPdf();
-  const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-  const a = el('a', { href: url, download: fileNameFor(state.note) });
+  const filename = fileNameFor(state.note);
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const host = await hostDownloads;
+  if (host) {
+    try {
+      await host.save({ filename, data: blob });
+    } catch (err) {
+      if (err?.code !== 'declined') {
+        $('#action-hint').textContent = `Speichern nicht möglich (${err?.message || err?.code || err}).`;
+        $('#action-hint').dataset.kind = 'error';
+      }
+    }
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: filename });
   document.body.append(a);
   a.click();
   a.remove();
