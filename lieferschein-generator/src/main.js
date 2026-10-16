@@ -3,8 +3,7 @@
 // Cookies, kein Server. Aufbau und Bedienung wie im AB-Generator.
 
 import './styles.css';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
-import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
+import { loadAssets, pdfjsLib } from './app/runtime.js';
 import { readPdfPages } from './parser/pdf-text.js';
 import { parseOfferPages } from './parser/offer-parser.js';
 import { parseOfferText } from './parser/offer-text.js';
@@ -17,10 +16,7 @@ import {
   validateDeliveryNote,
 } from './delivery-note/model.js';
 import { renderDeliveryNote } from './pdf/render.js';
-import { loadAssets } from './app/assets.js';
 import { renderPreview } from './app/preview.js';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
 const $ = (sel) => document.querySelector(sel);
 

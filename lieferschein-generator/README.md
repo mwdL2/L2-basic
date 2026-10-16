@@ -87,6 +87,18 @@ npm test           # Parser, Modell, PDF (synthetische Angebote, keine Kundendat
 npm run build      # statische Dateien in dist/ – auf beliebigen Webspace kopieren
 ```
 
+### Als einzelne HTML-Datei (ohne Server)
+
+```bash
+npm run build:html   # → dist-standalone/Lieferschein-Generator.html (ca. 3,5 MB)
+```
+
+Die Datei enthält Code, Styles, Schriften, Logo und pdf.js und läuft per Doppelklick
+direkt von der Festplatte – auch offline. Eine CSP in der Datei sperrt jede
+Netzwerkverbindung. Unterschiede zur Server-Variante: pdf.js arbeitet ohne separaten
+Worker (Hinweis „Setting up fake worker“ in der Konsole ist normal), Schriften und
+Bilder kommen aus `src/app/runtime.standalone.js` statt per `fetch`.
+
 Echtes Angebot zusätzlich prüfen (wird nicht eingecheckt):
 
 ```bash
