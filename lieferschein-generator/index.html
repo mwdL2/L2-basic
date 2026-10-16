@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      Datenschutz: Die Seite lädt nur Dateien vom eigenen Server (Code, Schriften, Bilder).
+      Verbindungen zu fremden Servern sind per CSP gesperrt – Angebote und erzeugte
+      Lieferscheine verlassen den Browser nie und werden nirgends gespeichert.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Lieferschein-Generator</title>
+    <style>
+      /* relative URLs: funktionieren auf jedem Webspace-Unterordner */
+      @font-face {
+        font-family: 'Lexend TPC';
+        src: url('fonts/LexendTPC-Regular.ttf') format('truetype');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Lexend TPC';
+        src: url('fonts/Lexend-Bold.ttf') format('truetype');
+        font-weight: 700;
+        font-display: swap;
+      }
+    </style>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231FA7AA'/%3E%3Cpath d='M7 12h11v9H7zM18 15h4l3 3v3h-7z' fill='white'/%3E%3Ccircle cx='11' cy='22' r='2.2' fill='%231FA7AA' stroke='white' stroke-width='1.6'/%3E%3Ccircle cx='21' cy='22' r='2.2' fill='%231FA7AA' stroke='white' stroke-width='1.6'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34"><rect width="32" height="32" rx="8" fill="#1FA7AA" /><path d="M7 12h11v9H7zM18 15h4l3 3v3h-7z" fill="#fff" /><circle cx="11" cy="22" r="2.2" fill="#1FA7AA" stroke="#fff" stroke-width="1.6" /><circle cx="21" cy="22" r="2.2" fill="#1FA7AA" stroke="#fff" stroke-width="1.6" /></svg>
+        </span>
+        <div>
+          <h1>Lieferschein-Generator</h1>
+          <p>Angebot (PDF) → Lieferschein (PDF)</p>
+        </div>
+      </div>
+      <p class="privacy" title="Die Verarbeitung passiert ausschließlich in diesem Browser-Tab. Es gibt keinen Server, keine Datenbank und keinen Upload.">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>
+        Läuft lokal im Browser · keine Speicherung · kein Upload
+      </p>
+    </header>
+
+    <div id="banner" class="banner banner-warn" hidden></div>
+
+    <main id="app">
+      <!-- Schritt 1: Angebot laden -->
+      <section id="step-load" class="card load-card">
+        <label id="dropzone" class="dropzone" tabindex="0">
+          <input id="file-input" type="file" accept="application/pdf,.pdf" hidden />
+          <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm0 2.5L17.5 8H14V4.5ZM12 11l4 4h-3v4h-2v-4H8l4-4Z"/></svg>
+          <strong>Angebot als PDF hierher ziehen</strong>
+          <span>oder <u>Datei auswählen</u></span>
+        </label>
+        <div id="load-status" class="load-status" role="status" aria-live="polite"></div>
+
+        <div class="fallbacks">
+          <p class="muted">Klappt das Einlesen nicht? Ausweichwege:</p>
+          <div class="fallback-actions">
+            <button type="button" class="btn btn-ghost" id="btn-paste">Text aus dem Angebot einfügen</button>
+            <button type="button" class="btn btn-ghost" id="btn-manual">Manuell ausfüllen</button>
+          </div>
+          <div id="paste-area" class="paste-area" hidden>
+            <label for="paste-input">Angebot im PDF-Viewer öffnen, alles markieren (Strg/Cmd + A), kopieren und hier einfügen:</label>
+            <textarea id="paste-input" rows="10" spellcheck="false"></textarea>
+            <button type="button" class="btn btn-primary" id="btn-paste-go">Text auswerten</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Schritt 2: Prüfen, ergänzen, ausgeben -->
+      <section id="step-edit" class="edit-layout" hidden>
+        <div class="edit-col">
+          <div id="summary" class="card summary"></div>
+          <form id="note-form" class="card form" novalidate autocomplete="off"></form>
+          <details id="details-log" class="card log">
+            <summary>Erkennungsprotokoll</summary>
+            <div id="log-content"></div>
+          </details>
+        </div>
+        <aside class="preview-col">
+          <div class="card preview">
+            <div class="preview-head">
+              <h2>Vorschau</h2>
+              <span id="preview-state" class="muted"></span>
+            </div>
+            <div id="preview-pages" class="preview-pages"></div>
+            <div class="actions">
+              <p id="action-hint" class="action-hint"></p>
+              <button type="button" class="btn btn-primary btn-lg" id="btn-download" disabled>Lieferschein als PDF herunterladen</button>
+              <button type="button" class="btn btn-ghost" id="btn-reset">Neues Angebot laden</button>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="page-foot muted">
+      <span>Erkennung: deterministisch (PDF-Layout → Textmuster → Dateiname → manuell) · Preise werden nicht übernommen</span>
+    </footer>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

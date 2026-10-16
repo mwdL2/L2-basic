@@ -40,9 +40,9 @@ const HEADER_COLUMNS = [
   ['net', /^(?:Nettobetrag|Gesamtpreis|Gesamt|Betrag|Summe|Netto)/i],
 ];
 
-const TOTAL_LABEL = /^(?:Nettobetrag|Zwischensumme|Summe|MwSt|USt|Gesamt|Endbetrag|Brutto|Rabatt|Nachlass)/i;
-const INTRO_LINE = /^(?:Gerne|Sehr geehrte|Vielen Dank|Hiermit|Wir bieten|Wie besprochen|Exkl\.|Inkl\.|Zzgl\.)/i;
-const PAGE_NUMBER = /^Seite\s+\d+\s*(?:\/|von)\s*\d+$/i;
+export const TOTAL_LABEL = /^(?:Nettobetrag|Zwischensumme|Summe|MwSt|USt|Gesamt|Endbetrag|Brutto|Rabatt|Nachlass)/i;
+export const INTRO_LINE = /^(?:Gerne|Sehr geehrte|Vielen Dank|Hiermit|Wir bieten|Wie besprochen|Exkl\.|Inkl\.|Zzgl\.)/i;
+export const PAGE_NUMBER = /^Seite\s+\d+\s*(?:\/|von)\s*\d+$/i;
 const MONEY = /-?(?:\d{1,3}(?:\.\d{3})+|\d+),\d{2,4}/;
 
 export function emptyOffer() {
@@ -88,7 +88,7 @@ export function parseOfferPages(pages, opts = {}) {
     res.log.push(`Layout-Auswertung abgebrochen: ${err.message}`);
   }
   try {
-    applyTextFallback(res, pageLines);
+    applyTextFallback(res, pageLines.flat().map((l) => l.text));
   } catch (err) {
     res.log.push(`Text-Auswertung abgebrochen: ${err.message}`);
   }
@@ -179,7 +179,7 @@ function parseLayout(res, pages, pageLines) {
   else res.log.push('Tabellenkopf (Artikel / Menge) nicht gefunden.');
 }
 
-function set(res, key, value, source) {
+export function set(res, key, value, source) {
   res.fields[key] = value;
   res.sources[key] = source;
 }
@@ -386,8 +386,8 @@ function readTotals(res, lines, qtyX) {
 
 // ═══════════════════════════════════════════ Stufe 2: reiner Text ══════
 
-function applyTextFallback(res, pageLines) {
-  const lines = pageLines.flat().map((l) => l.text);
+/** @param {string[]} lines  Textzeilen (Zellen durch mindestens zwei Leerzeichen getrennt) */
+export function applyTextFallback(res, lines) {
   const full = lines.join('\n');
   const f = res.fields;
 
@@ -400,6 +400,12 @@ function applyTextFallback(res, pageLines) {
   if (!f.offerDate) {
     const m = full.match(/(?:Ausstellungsdatum|Angebotsdatum)\s*:?\s*(\d{1,2}\.\d{1,2}\.\d{4})/i);
     if (m && germanDateToIso(m[1])) set(res, 'offerDate', m[1], 'text');
+    else {
+      // Label und Wert getrennt kopiert: erstes Datum vor der Tabelle, nicht aus der Gültigkeitszeile
+      const head = lines.slice(0, Math.max(0, lines.findIndex((l) => /\bArtikel\b/i.test(l))) || lines.length);
+      const d = head.filter((l) => !/gilt|gültig/i.test(l)).map((l) => l.match(/\b(\d{1,2}\.\d{1,2}\.\d{4})\b/)?.[1]).find((v) => v && germanDateToIso(v));
+      if (d) set(res, 'offerDate', d, 'text');
+    }
   }
   if (!f.customerVatId) {
     const m = full.match(/Kunden[-\s]?USt\.?[-\s]?ID[-\s]?Nr\.?\s*:?\s*([A-Z]{2}\s?[0-9A-Z+*]{2,12})/i);
@@ -413,13 +419,15 @@ function applyTextFallback(res, pageLines) {
     const idx = lines.findIndex((l) => l.startsWith(COMPANY.name) && /[·•|]/.test(l));
     const name = idx >= 0 ? lines[idx + 1] : null;
     if (name) {
-      const clean = name.split('  ')[0];
+      const clean = stripMeta(name.split('  ')[0]);
       if (clean && !Object.values(LABELS).some((re) => re.test(clean))) {
         set(res, 'customerName', clean, 'text');
         const addr = [];
         for (let i = idx + 2; i < lines.length && addr.length < 5; i++) {
-          const l = lines[i].split('  ')[0];
-          if (!l || INTRO_LINE.test(l) || Object.values(LABELS).some((re) => re.test(l))) break;
+          const l = stripMeta(lines[i].split('  ')[0]);
+          if (!l || INTRO_LINE.test(l) || /^Artikel\b/i.test(l)) break;
+          // Kopfdaten (Label oder reiner Wert), die zwischen den Adresszeilen stehen, überspringen
+          if (Object.values(LABELS).some((re) => re.test(l)) || isMetaValue(l)) continue;
           addr.push(l);
         }
         if (!f.customerAddress.length && addr.length) set(res, 'customerAddress', addr, 'text');
@@ -428,9 +436,21 @@ function applyTextFallback(res, pageLines) {
   }
 }
 
+function isMetaValue(l) {
+  const v = l.replace(/\s/g, '');
+  return VALID.offerNumber(v) || germanDateToIso(v) != null || (/^[A-Z]{2}\d{8,12}$/.test(v));
+}
+
+/** Kopfdaten, die beim Kopieren in dieselbe Zeile wie die Adresse gerutscht sind, abschneiden */
+function stripMeta(line) {
+  return normalizeSpaces(
+    String(line).replace(/\s+(?:Kunden[-\s]?USt|Kunden[-\s]?(?:nummer|nr)|Angebots?[-\s]?(?:nummer|nr)|Ausstellungsdatum|Angebotsdatum)\b.*$/i, ''),
+  );
+}
+
 // ═══════════════════════════════════════════ Stufe 3: Dateiname ═══════
 
-function applyFilenameFallback(res, fileName) {
+export function applyFilenameFallback(res, fileName) {
   if (!fileName || res.fields.offerNumber) return;
   const m = String(fileName).match(/([A-Z]{1,5}-\d{4}-\d{2,6})/);
   if (m) set(res, 'offerNumber', m[1], 'filename');

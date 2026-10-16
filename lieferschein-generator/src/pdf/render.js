@@ -245,14 +245,17 @@ function drawTableHeader(ctx, top) {
     ctx.text(ctx.page, col.label, col.x0 + TABLE.inset, top + TABLE.headerBaseline, bold, TABLE.headerSize, COLORS.white);
   }
   // weiße Zellränder wie im Muster (trennen die Kopfzellen optisch)
+  const white = color(COLORS.white);
+  const bottom = PAGE.height - top - TABLE.headerHeight + TABLE.borderWidth / 2;
   for (const x of TABLE.borderX) {
-    ctx.page.drawLine({
-      start: { x, y: PAGE.height - top },
-      end: { x, y: PAGE.height - top - TABLE.headerHeight },
-      thickness: TABLE.borderWidth,
-      color: color(COLORS.white),
-    });
+    ctx.page.drawLine({ start: { x, y: PAGE.height - top }, end: { x, y: bottom }, thickness: TABLE.borderWidth, color: white });
   }
+  ctx.page.drawLine({
+    start: { x: TABLE.borderX[0], y: bottom },
+    end: { x: TABLE.borderX[TABLE.borderX.length - 1], y: bottom },
+    thickness: TABLE.borderWidth,
+    color: white,
+  });
   return top + TABLE.headerHeight + TABLE.firstRowBaseline;
 }
 
@@ -304,8 +307,9 @@ function drawTable(ctx, note) {
           });
         }
       }
-      if (qtyLines[i]) ctx.text(ctx.page, qtyLines[i], qty.x0 + TABLE.inset, y, regular, TABLE.size);
-      if (unitLines[i]) ctx.text(ctx.page, unitLines[i], unit.x0 + TABLE.inset, y, regular, TABLE.size);
+      const vy = y + TABLE.valueShift;
+      if (qtyLines[i]) ctx.text(ctx.page, qtyLines[i], qty.x0 + TABLE.inset, vy, regular, TABLE.size);
+      if (unitLines[i]) ctx.text(ctx.page, unitLines[i], unit.x0 + TABLE.inset, vy, regular, TABLE.size);
       if (i < height - 1) y += TABLE.lineStep;
     }
   });

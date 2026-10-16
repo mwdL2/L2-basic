@@ -45,6 +45,7 @@ export const TABLE = {
   ],
   borderX: [28.5, 302.5, 383.5, 523.5],
   borderWidth: 1,
+  valueShift: -2, // Menge/Einheit stehen im Muster 2 pt höher als die Artikelzeile
   inset: 5.25,
   firstRowBaseline: 18.25, // ab Unterkante Kopf
   size: 10.5,

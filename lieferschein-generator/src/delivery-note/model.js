@@ -46,6 +46,23 @@ export function deliveryNoteFromOffer(offer, opts = {}) {
   };
 }
 
+/** Leerer Lieferschein für die manuelle Erfassung */
+export function emptyDeliveryNote(opts = {}) {
+  return {
+    number: '',
+    issueDate: opts.today || todayIso(),
+    offerNumber: '',
+    showOfferNumber: true,
+    customerVatId: '',
+    showCustomerVatId: false,
+    billing: emptyAddress(),
+    deliverySameAsBilling: true,
+    delivery: emptyAddress(),
+    intro: DEFAULT_INTRO,
+    items: [emptyItem()],
+  };
+}
+
 /** Empfänger des Lieferscheins (oben rechts) */
 export function recipientOf(note) {
   return note.deliverySameAsBilling ? note.billing : note.delivery;
