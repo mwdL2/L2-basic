@@ -1,0 +1,10 @@
+node_modules/
+dist/
+# Echte Firmendaten (IBAN, Steuernummer …) nicht ins öffentliche Repository:
+public/firmendaten.json
+# Echte Angebote/ABs nur lokal testen:
+test/private/
+.DS_Store
+test/fixtures-src/.tmp/
+# Von der Kommandozeile erzeugte ABs
+/TPC-AB-*.pdf

@@ -1,0 +1,35 @@
+{
+  "_hinweis": "Vorlage. Kopieren nach public/firmendaten.json und mit echten Firmendaten füllen. **Text** in der Fußzeile wird fett gedruckt.",
+  "firma": {
+    "name": "Musterfirma GmbH",
+    "absenderZeilen": ["Musterstraße 1", "12345, Musterstadt", "HRB000000B"],
+    "ustId": "DE000000000",
+    "steuernummer": "00/000/00000",
+    "email": "info@example.com",
+    "register": "HRB000000B"
+  },
+  "fusszeile": [
+    "Musterfirma GmbH • Musterstraße 1, 12345 Musterstadt • 0000 000 0000 • info@example.com",
+    "**BANK:** Musterbank • **IBAN:** DE00000000000000000000 • **BIC:** XXXXDEXXXXX",
+    "**USt-IdNr.:** DE000000000 • **Steuernummer:** 00/000/00000"
+  ],
+  "ab": {
+    "titel": "Auftragsbestätigung",
+    "nummernVorlage": "TPC-AB-{jahr}-{nr}",
+    "datumsformat": "TT/MM/JJJJ",
+    "einleitung": "Gerne bestätigen wir Ihnen hiermit folgenden Lieferauftrag:",
+    "standardEinheit": "Stück",
+    "standardMwSt": "19",
+    "zahlungsUeberschrift": "Zahlungsbedingungen:",
+    "spalten": ["Artikel", "Menge", "Einheit", "Preis pro Einheit (netto)"],
+    "logo": "img/logo.png",
+    "dateiname": "{abNummer}.pdf"
+  },
+  "optionen": {
+    "angebotsbezug": true,
+    "kundenUstId": true,
+    "summen": false,
+    "weitereHinweise": false,
+    "inlandLandWeglassen": true
+  }
+}

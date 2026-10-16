@@ -1,0 +1,42 @@
+Seite 1/1
+Geschäftsführung: Max Mustermann
+Steuernummer: 00/000/00000
+USt-IDNr. DE000000000
+Musterfirma GmbH
+Musterstraße 1,
+12345 Musterstadt, DE
+info@example.com
+Registergericht: Musterstadt · HRB000000B
+Angebot
+Musterfirma GmbH · Musterstraße 1, 12345 Musterstadt, DE
+Musterkunde Sport GmbH
+Beispielweg 12 / 14
+10115 Berlin
+Deutschland
+Kunden-USt-IDNr. DE123456789
+Angebotsnummer A-2026-0101
+Ausstellungsdatum 05.10.2026
+Gerne bieten wir die unten aufgeführten Artikel zu folgenden Preisen an.
+Exkl. Versand
+Artikel Menge Einzelpreis MwSt. (%) Nettobetrag
+Sonderanfertigung Kunststoff-Shaker
+Inkl. Logodruck
+Inkl. Mixerball
+Material: Weizenstroh-PP
+Fertigungsort: China
+15000 1,19 € 19 % 17.850,00 €
+Add-on: Faltkarton
+Inkl. vollflächigem Full-Color-Print
+Inkl. Konfektionierung
+Textur: Seidenmatt
+Passend zu Shaker
+15000 0,17 € 19 % 2.550,00 €
+Nettobetrag 20.400,00 €
+MwSt.-Betrag insgesamt 3.876,00 €
+Gesamt (inkl. MwSt.) 24.276,00 €
+Dieses Angebot gilt für 30 Tage. (04.11.2026)
+Zahlungsbedingungen:
+35% Anzahlung
+65% Innerhalb von 14 Tagen nach Anlieferung
+Es gelten unsere unter www.example.com/agb einsehbaren AGBs
+

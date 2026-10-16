@@ -1,0 +1,90 @@
+Seite 1/2
+Geschäftsführung: Max Mustermann
+Steuernummer: 00/000/00000
+USt-IDNr. DE000000000
+Musterfirma GmbH
+Musterstraße 1,
+12345 Musterstadt, DE
+info@example.com
+Registergericht: Musterstadt · HRB000000B
+Angebot
+Musterfirma GmbH · Musterstraße 1, 12345 Musterstadt, DE
+Mehrseiten Testkunde AG
+Lange Straße 1
+20095 Hamburg
+Deutschland
+Kunden-USt-IDNr. DE987654321
+Angebotsnummer A-2026-0103
+Ausstellungsdatum 07.10.2026
+Gerne bieten wir die unten aufgeführten Artikel zu folgenden Preisen an.
+Exkl. Versand
+Lieferzeit ca. 8–10 Wochen nach Druckfreigabe
+Artikel Menge Einzelpreis MwSt. (%) Nettobetrag
+Testartikel 1 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 300
+Material: Recycling-PP
+500 0,95 € 19 % 475,00 €
+Testartikel 2 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 301
+Material: Recycling-PP
+Einzeln verpackt
+1000 1,05 € 19 % 1.050,00 €
+Testartikel 3 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 302
+Material: Recycling-PP
+1500 1,15 € 19 % 1.725,00 €
+Testartikel 4 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 303
+Material: Recycling-PP
+Einzeln verpackt
+2000 1,25 € 19 % 2.500,00 €
+Seite 2/2
+Geschäftsführung: Max Mustermann
+Steuernummer: 00/000/00000
+USt-IDNr. DE000000000
+Musterfirma GmbH
+Musterstraße 1,
+12345 Musterstadt, DE
+info@example.com
+Registergericht: Musterstadt · HRB000000B
+Artikel Menge Einzelpreis MwSt. (%) Nettobetrag
+Testartikel 5 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 304
+Material: Recycling-PP
+2500 1,35 € 19 % 3.375,00 €
+Testartikel 6 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 305
+Material: Recycling-PP
+Einzeln verpackt
+3000 1,45 € 19 % 4.350,00 €
+Testartikel 7 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 306
+Material: Recycling-PP
+3500 1,55 € 19 % 5.425,00 €
+Testartikel 8 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 307
+Material: Recycling-PP
+Einzeln verpackt
+4000 1,65 € 19 % 6.600,00 €
+Testartikel 9 mit Veredelung
+Inkl. Logodruck
+Farbe: Pantone 308
+Material: Recycling-PP
+4500 1,75 € 19 % 7.875,00 €
+Nettobetrag 33.375,00 €
+MwSt.-Betrag insgesamt 6.341,25 €
+Gesamt (inkl. MwSt.) 39.716,25 €
+Dieses Angebot gilt für 30 Tage. (06.11.2026)
+Zahlungsbedingungen:
+50% Anzahlung
+50% vor Auslieferung
+Es gelten unsere unter www.example.com/agb einsehbaren AGBs
+
